@@ -25,7 +25,7 @@ describe("htmlToMarkdown", () => {
     document.title = "Full Page Example";
     window.history.replaceState({}, "", "/full-page");
     document.body.innerHTML = `
-      <div id="copytex-plus-ui-root"><button>复制</button><p>internal toast</p></div>
+      <div id="copy-web-to-ai-ui-root"><button>复制</button><p>internal toast</p></div>
       <main>
         <h1>Article</h1>
         <p>First screen text.</p>

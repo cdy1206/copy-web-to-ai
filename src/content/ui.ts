@@ -1,4 +1,4 @@
-const ROOT_ID = "copytex-plus-ui-root";
+const ROOT_ID = "copy-web-to-ai-ui-root";
 
 let toastTimer: number | null = null;
 
@@ -25,10 +25,10 @@ export async function copyText(text: string): Promise<void> {
 
 export function showToast(message: string, tone: "ok" | "error" | "info" = "info"): void {
   const root = ensureRoot();
-  let toast = root.querySelector<HTMLElement>(".copytex-plus-toast");
+  let toast = root.querySelector<HTMLElement>(".copy-web-to-ai-toast");
   if (!toast) {
     toast = document.createElement("div");
-    toast.className = "copytex-plus-toast";
+    toast.className = "copy-web-to-ai-toast";
     root.append(toast);
   }
 
@@ -62,7 +62,7 @@ export function ensureRoot(): HTMLElement {
       z-index: 2147483647;
     }
 
-    #${ROOT_ID} .copytex-plus-toast {
+    #${ROOT_ID} .copy-web-to-ai-toast {
       position: fixed;
       left: 50%;
       bottom: 28px;
@@ -80,20 +80,20 @@ export function ensureRoot(): HTMLElement {
       white-space: normal;
     }
 
-    #${ROOT_ID} .copytex-plus-toast[data-visible="true"] {
+    #${ROOT_ID} .copy-web-to-ai-toast[data-visible="true"] {
       opacity: 1;
       transform: translateX(-50%) translateY(0);
     }
 
-    #${ROOT_ID} .copytex-plus-toast[data-tone="ok"] {
+    #${ROOT_ID} .copy-web-to-ai-toast[data-tone="ok"] {
       background: rgba(28, 116, 64, 0.96);
     }
 
-    #${ROOT_ID} .copytex-plus-toast[data-tone="error"] {
+    #${ROOT_ID} .copy-web-to-ai-toast[data-tone="error"] {
       background: rgba(178, 45, 45, 0.96);
     }
 
-    #${ROOT_ID} .copytex-plus-formula-button {
+    #${ROOT_ID} .copy-web-to-ai-formula-button {
       position: fixed;
       min-width: 48px;
       height: 28px;
@@ -108,7 +108,7 @@ export function ensureRoot(): HTMLElement {
       pointer-events: auto;
     }
 
-    #${ROOT_ID} .copytex-plus-ocr-layer {
+    #${ROOT_ID} .copy-web-to-ai-ocr-layer {
       position: fixed;
       inset: 0;
       cursor: crosshair;
@@ -116,14 +116,14 @@ export function ensureRoot(): HTMLElement {
       pointer-events: auto;
     }
 
-    #${ROOT_ID} .copytex-plus-ocr-box {
+    #${ROOT_ID} .copy-web-to-ai-ocr-box {
       position: fixed;
       border: 2px solid #ffffff;
       background: rgba(59, 130, 246, 0.18);
       box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.20);
     }
 
-    #${ROOT_ID} .copytex-plus-ocr-hint {
+    #${ROOT_ID} .copy-web-to-ai-ocr-hint {
       position: fixed;
       top: 16px;
       left: 50%;

@@ -15,7 +15,7 @@ if (!app) throw new Error("Missing options root");
 app.innerHTML = `
   <section class="shell">
     <header>
-      <h1>CopyTeX+ 设置</h1>
+      <h1>Copy Web to AI 设置</h1>
       <p>Token 只保存在本机浏览器的 local storage。</p>
     </header>
 

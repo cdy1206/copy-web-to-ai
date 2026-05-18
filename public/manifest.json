@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "CopyTeX+",
+  "name": "Copy Web to AI",
   "version": "0.1.0",
-  "description": "复制 AI 聊天、网页选区和公式为 Markdown/LaTeX，并提供手动 MinerU OCR 兜底。",
+  "description": "把网页和 AI 对话剪成适合投喂 AI 的 Markdown/LaTeX，图片内容可手动 MinerU OCR。",
   "permissions": [
     "activeTab",
     "clipboardWrite",
@@ -28,7 +28,7 @@
   },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "CopyTeX+"
+    "default_title": "Copy Web to AI"
   },
   "options_page": "options.html",
   "content_scripts": [

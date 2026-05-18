@@ -43,8 +43,8 @@ export async function runMineruOcr(blob: Blob, settings: MineruSettings): Promis
     throw new Error("请先在设置页填写 MinerU Token");
   }
 
-  const fileName = `copytex-region-${Date.now()}.png`;
-  const dataId = `copytex-${crypto.randomUUID()}`;
+  const fileName = `copy-web-to-ai-region-${Date.now()}.png`;
+  const dataId = `copy-web-to-ai-${crypto.randomUUID()}`;
   const mineruUserId = normalizeMineruUserId(settings.mineruUserId) ?? extractUserIdFromJwt(token);
   const { batchId, uploadUrl } = await createUploadUrl(token, mineruUserId, fileName, dataId, settings.ocrLanguage);
   await uploadFile(uploadUrl, blob);

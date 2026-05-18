@@ -1,6 +1,6 @@
 import { showToast } from "./ui";
 
-const STYLE_ID = "copytex-plus-unlock-style";
+const STYLE_ID = "copy-web-to-ai-unlock-style";
 
 let enabled = false;
 
@@ -60,7 +60,7 @@ function injectStyle(): void {
 function stopPageBlockers(event: Event): void {
   if (!enabled) return;
   const target = event.target;
-  if (target instanceof Element && target.closest("#copytex-plus-ui-root")) return;
+  if (target instanceof Element && target.closest("#copy-web-to-ai-ui-root")) return;
 
   event.stopImmediatePropagation();
 

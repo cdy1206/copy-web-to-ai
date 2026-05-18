@@ -6,7 +6,7 @@ import packageJson from "../package.json" with { type: "json" };
 const root = process.cwd();
 const distDir = path.join(root, "dist");
 const releaseDir = path.join(root, "release");
-const packageName = "copytex-plus";
+const packageName = "copy-web-to-ai";
 const version = packageJson.version;
 const outputPath = path.join(releaseDir, `${packageName}-v${version}.zip`);
 
@@ -28,13 +28,13 @@ async function addDirectory(directory, archivePrefix) {
 await addDirectory(distDir, packageName);
 files[`${packageName}/INSTALL.txt`] = strToU8(
   [
-    "CopyTeX+ local install",
+    "Copy Web to AI local install",
     "",
     "1. Unzip this archive.",
     "2. Open chrome://extensions or edge://extensions.",
     "3. Enable Developer mode.",
     "4. Click Load unpacked.",
-    "5. Select the unzipped copytex-plus folder that contains manifest.json.",
+    "5. Select the unzipped copy-web-to-ai folder that contains manifest.json.",
     ""
   ].join("\n")
 );

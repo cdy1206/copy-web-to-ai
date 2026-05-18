@@ -1,8 +1,8 @@
 {
-  "name": "copytex-plus",
+  "name": "copy-web-to-ai",
   "version": "0.1.0",
   "private": true,
-  "description": "Chrome/Edge MV3 extension for copying AI chat content as Markdown and LaTeX, with explicit MinerU OCR fallback.",
+  "description": "Chrome/Edge MV3 extension for clipping web and AI chat content into AI-ready Markdown/LaTeX, with explicit MinerU OCR fallback.",
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",

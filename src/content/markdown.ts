@@ -65,7 +65,7 @@ function domToMarkdown(root: Element): string {
   turndown.addRule("latexMarker", {
     filter: (node) =>
       node.nodeType === Node.ELEMENT_NODE &&
-      (node as Element).classList.contains("copytex-plus-latex-marker"),
+      (node as Element).classList.contains("copy-web-to-ai-latex-marker"),
     replacement: (_content, node) => {
       const element = node as Element;
       const latex = element.textContent ?? "";
@@ -101,7 +101,7 @@ function normalizeMath(root: Element): void {
     if (!math) continue;
 
     const marker = document.createElement(math.mode === "display" ? "div" : "span");
-    marker.className = "copytex-plus-latex-marker";
+    marker.className = "copy-web-to-ai-latex-marker";
     marker.dataset.displayMode = math.mode;
     marker.textContent = wrapLatex(math.latex, math.mode);
     element.replaceWith(marker);
@@ -148,7 +148,7 @@ function stripNoise(root: Element): void {
         "[inert]",
         "[aria-hidden='true']",
         "dialog:not([open])",
-        "#copytex-plus-ui-root",
+        "#copy-web-to-ai-ui-root",
         "svg[aria-hidden='true']",
         "[aria-hidden='true'] .katex-html",
         ".katex-html",

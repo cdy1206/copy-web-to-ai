@@ -16,9 +16,9 @@ export function startOcrRegionSelection(): Promise<RegionRect | null> {
     const box = document.createElement("div");
     const hint = document.createElement("div");
 
-    layer.className = "copytex-plus-ocr-layer";
-    box.className = "copytex-plus-ocr-box";
-    hint.className = "copytex-plus-ocr-hint";
+    layer.className = "copy-web-to-ai-ocr-layer";
+    box.className = "copy-web-to-ai-ocr-box";
+    hint.className = "copy-web-to-ai-ocr-hint";
     hint.textContent = "拖拽框选要 OCR 的可见区域，按 Esc 取消";
     layer.append(box, hint);
     root.append(layer);

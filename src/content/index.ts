@@ -6,7 +6,7 @@ import { copyText, ensureRoot, showToast } from "./ui";
 import { isUnlockCopyEnabled, toggleUnlockCopy } from "./unlock";
 
 type RuntimeMessage =
-  | { type: "PING_COPYTEX_PLUS" }
+  | { type: "PING_COPY_WEB_TO_AI" }
   | { type: "COPY_SELECTION_MARKDOWN" }
   | { type: "COPY_ACTIVE_ANSWER" }
   | { type: "COPY_VISIBLE_CHAT" }
@@ -18,12 +18,12 @@ type OcrResponse = { ok: true; markdown: string } | { ok: false; error: string }
 
 declare global {
   interface Window {
-    __copytexPlusLoaded?: boolean;
+    __copyWebToAiLoaded?: boolean;
   }
 }
 
-if (!window.__copytexPlusLoaded) {
-  window.__copytexPlusLoaded = true;
+if (!window.__copyWebToAiLoaded) {
+  window.__copyWebToAiLoaded = true;
   trackPointerTarget();
   initializeFormulaButton();
   initializeMessages();
@@ -44,7 +44,7 @@ function initializeMessages(): void {
 
 async function handleMessage(message: RuntimeMessage): Promise<Record<string, unknown>> {
   switch (message.type) {
-    case "PING_COPYTEX_PLUS":
+    case "PING_COPY_WEB_TO_AI":
       return { ok: true };
     case "COPY_SELECTION_MARKDOWN":
       return copyMarkdownResult(selectionToMarkdown(), "已复制选区 Markdown");
@@ -98,7 +98,7 @@ async function initializeFormulaButton(): Promise<void> {
   const root = ensureRoot();
   const button = document.createElement("button");
   button.type = "button";
-  button.className = "copytex-plus-formula-button";
+  button.className = "copy-web-to-ai-formula-button";
   button.textContent = "复制";
   button.title = "复制 LaTeX";
   button.style.display = "none";

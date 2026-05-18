@@ -15,7 +15,7 @@ app.innerHTML = `
   <section class="panel">
     <header>
       <div>
-        <h1>CopyTeX+</h1>
+        <h1>Copy Web to AI</h1>
         <p id="host">当前标签页</p>
       </div>
       <button class="icon-button" id="open-options" title="设置" type="button">⚙</button>
@@ -78,7 +78,7 @@ async function executeAction(action: Action, button: HTMLButtonElement): Promise
       throw new Error("请在已加载的浏览器扩展中使用");
     }
     const response = await chrome.runtime.sendMessage({
-      type: "EXECUTE_COPYTEX_ACTION",
+      type: "EXECUTE_COPY_WEB_TO_AI_ACTION",
       action
     });
     if (!response?.ok) {

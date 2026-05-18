@@ -1,8 +1,8 @@
-# CopyTeX+
+# Copy Web to AI
 
-复制网页给 AI，别再和公式、代码块、表格、禁止复制较劲。
+把网页、AI 对话和公式，一键复制成 AI 能读懂的 Markdown/LaTeX。
 
-CopyTeX+ 是一个 Chrome/Edge 浏览器插件。它把 ChatGPT、Gemini、Claude、DeepSeek 和普通网页里的内容复制成更适合投喂 AI 的 Markdown/LaTeX。能直接从网页读取的内容，就在本地完成；遇到图片、canvas、扫描件或真的复制不了的区域，再由你手动框选后交给 MinerU OCR。
+Copy Web to AI 是一个 Chrome/Edge 浏览器插件。它把 ChatGPT、Gemini、Claude、DeepSeek 和普通网页里的内容复制成更适合投喂 AI 的 Markdown/LaTeX。能直接从网页读取的内容，就在本地完成；遇到图片、canvas、扫描件或真的复制不了的区域，再由你手动框选后交给 MinerU OCR。
 
 一句话：你看到的网页内容，尽量变成 AI 能继续理解和处理的干净文本。
 
@@ -28,9 +28,9 @@ CopyTeX+ 是一个 Chrome/Edge 浏览器插件。它把 ChatGPT、Gemini、Claud
 
 请下载已经打包好的插件包：
 
-- [copytex-plus-v0.1.0.zip](https://github.com/cdy1206/copytex-plus/raw/main/release/copytex-plus-v0.1.0.zip)
+- [copy-web-to-ai-v0.1.0.zip](https://github.com/cdy1206/copy-web-to-ai/raw/main/release/copy-web-to-ai-v0.1.0.zip)
 
-下载后先解压。Chrome/Edge 的开发者模式不能直接加载 `.zip`，只能加载文件夹。解压出来的 `copytex-plus` 文件夹里应该能看到 `manifest.json`。
+下载后先解压。Chrome/Edge 的开发者模式不能直接加载 `.zip`，只能加载文件夹。解压出来的 `copy-web-to-ai` 文件夹里应该能看到 `manifest.json`。
 
 ### 2. 加载到浏览器
 
@@ -43,7 +43,7 @@ CopyTeX+ 是一个 Chrome/Edge 浏览器插件。它把 ChatGPT、Gemini、Claud
 
 1. 开启“开发者模式”。
 2. 点击“加载已解压的扩展”。
-3. 选择刚刚解压出来的 `copytex-plus` 文件夹。
+3. 选择刚刚解压出来的 `copy-web-to-ai` 文件夹。
 
 注意：浏览器加载的是“解压后的文件夹”，不是 `.zip` 文件本身，也不是 GitHub 下载下来的源码文件夹。
 
@@ -52,8 +52,8 @@ CopyTeX+ 是一个 Chrome/Edge 浏览器插件。它把 ChatGPT、Gemini、Claud
 如果你想自己改代码或重新构建，再使用这条路径：
 
 ```bash
-git clone https://github.com/cdy1206/copytex-plus.git
-cd copytex-plus
+git clone https://github.com/cdy1206/copy-web-to-ai.git
+cd copy-web-to-ai
 npm install
 npm run build
 ```
@@ -69,9 +69,9 @@ npm run build
 - Claude: `https://claude.ai`
 - DeepSeek: `https://chat.deepseek.com`
 
-这些站点默认可用。其他网站可以在 CopyTeX+ 设置里开启“允许所有网站”。
+这些站点默认可用。其他网站可以在 Copy Web to AI 设置里开启“允许所有网站”。
 
-### 4. 点击浏览器工具栏里的 CopyTeX+
+### 4. 点击浏览器工具栏里的 Copy Web to AI
 
 你会看到这些按钮：
 
@@ -100,7 +100,7 @@ npm run build
 
 ## 它会保留什么
 
-CopyTeX+ 会尽量保留这些结构：
+Copy Web to AI 会尽量保留这些结构：
 
 - 标题
 - 段落
@@ -133,7 +133,7 @@ OCR 默认不会自动运行，也不会自动上传网页内容。你需要手�
 
 使用步骤：
 
-1. 打开 CopyTeX+ 设置页。
+1. 打开 Copy Web to AI 设置页。
 2. 填入 MinerU Token。
 3. 回到网页，点击 `框选 OCR`。
 4. 拖拽选择当前可见区域。
@@ -160,7 +160,7 @@ OCR 默认不会自动运行，也不会自动上传网页内容。你需要手�
 - 某些网页禁止选择、禁止右键。
 - 图片公式只能靠眼睛重打。
 
-CopyTeX+ 的思路是：先尊重网页本身的数据结构。能本地提取，就本地提取；只有真的没有文本源时，才让 OCR 上场。
+Copy Web to AI 的思路是：先尊重网页本身的数据结构。能本地提取，就本地提取；只有真的没有文本源时，才让 OCR 上场。
 
 ## 隐私和边界
 

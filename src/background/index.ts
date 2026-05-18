@@ -10,7 +10,7 @@ type ContentAction =
 
 type BackgroundMessage =
   | { type: "RUN_MINERU_OCR"; rect: RegionRect }
-  | { type: "EXECUTE_COPYTEX_ACTION"; action: ContentAction };
+  | { type: "EXECUTE_COPY_WEB_TO_AI_ACTION"; action: ContentAction };
 
 interface RegionRect {
   x: number;
@@ -22,15 +22,15 @@ interface RegionRect {
 }
 
 const MENU_IDS: Record<string, ContentAction> = {
-  "copytex-plus-copy-selection": "COPY_SELECTION_MARKDOWN",
-  "copytex-plus-copy-answer": "COPY_ACTIVE_ANSWER",
-  "copytex-plus-copy-visible-chat": "COPY_VISIBLE_CHAT",
-  "copytex-plus-copy-full-page": "COPY_FULL_PAGE_MARKDOWN",
-  "copytex-plus-unlock-copy": "TOGGLE_UNLOCK_COPY",
-  "copytex-plus-ocr-region": "START_REGION_OCR"
+  "copy-web-to-ai-copy-selection": "COPY_SELECTION_MARKDOWN",
+  "copy-web-to-ai-copy-answer": "COPY_ACTIVE_ANSWER",
+  "copy-web-to-ai-copy-visible-chat": "COPY_VISIBLE_CHAT",
+  "copy-web-to-ai-copy-full-page": "COPY_FULL_PAGE_MARKDOWN",
+  "copy-web-to-ai-unlock-copy": "TOGGLE_UNLOCK_COPY",
+  "copy-web-to-ai-ocr-region": "START_REGION_OCR"
 };
 
-const DYNAMIC_SCRIPT_ID = "copytex-plus-all-sites";
+const DYNAMIC_SCRIPT_ID = "copy-web-to-ai-all-sites";
 
 chrome.runtime.onInstalled.addListener(() => {
   void createContextMenus();
@@ -85,7 +85,7 @@ async function handleMessage(message: BackgroundMessage, sender: chrome.runtime.
     return { ok: true, markdown };
   }
 
-  if (message.type === "EXECUTE_COPYTEX_ACTION") {
+  if (message.type === "EXECUTE_COPY_WEB_TO_AI_ACTION") {
     const tab = await getActiveTab();
     if (!tab?.id) throw new Error("没有可操作的标签页");
     return runActionInTab(tab.id, message.action);
@@ -107,7 +107,7 @@ async function runActionInTab(tabId: number, action: ContentAction): Promise<unk
 
 async function ensureContentScript(tabId: number): Promise<void> {
   try {
-    await chrome.tabs.sendMessage(tabId, { type: "PING_COPYTEX_PLUS" });
+    await chrome.tabs.sendMessage(tabId, { type: "PING_COPY_WEB_TO_AI" });
     return;
   } catch {
     await chrome.scripting.executeScript({
@@ -121,33 +121,33 @@ async function ensureContentScript(tabId: number): Promise<void> {
 async function createContextMenus(): Promise<void> {
   await chrome.contextMenus.removeAll();
   chrome.contextMenus.create({
-    id: "copytex-plus-copy-selection",
-    title: "CopyTeX+: 复制选区为 Markdown/LaTeX",
+    id: "copy-web-to-ai-copy-selection",
+    title: "Copy Web to AI: 复制选区为 Markdown/LaTeX",
     contexts: ["selection"]
   });
   chrome.contextMenus.create({
-    id: "copytex-plus-copy-answer",
-    title: "CopyTeX+: 复制当前回答",
+    id: "copy-web-to-ai-copy-answer",
+    title: "Copy Web to AI: 复制当前回答",
     contexts: ["page", "selection"]
   });
   chrome.contextMenus.create({
-    id: "copytex-plus-copy-visible-chat",
-    title: "CopyTeX+: 复制可见会话",
+    id: "copy-web-to-ai-copy-visible-chat",
+    title: "Copy Web to AI: 复制可见会话",
     contexts: ["page"]
   });
   chrome.contextMenus.create({
-    id: "copytex-plus-copy-full-page",
-    title: "CopyTeX+: 复制整页为 Markdown/LaTeX",
+    id: "copy-web-to-ai-copy-full-page",
+    title: "Copy Web to AI: 复制整页为 Markdown/LaTeX",
     contexts: ["page", "selection"]
   });
   chrome.contextMenus.create({
-    id: "copytex-plus-unlock-copy",
-    title: "CopyTeX+: 临时解锁当前页复制",
+    id: "copy-web-to-ai-unlock-copy",
+    title: "Copy Web to AI: 临时解锁当前页复制",
     contexts: ["page", "selection"]
   });
   chrome.contextMenus.create({
-    id: "copytex-plus-ocr-region",
-    title: "CopyTeX+: 框选 MinerU OCR",
+    id: "copy-web-to-ai-ocr-region",
+    title: "Copy Web to AI: 框选 MinerU OCR",
     contexts: ["page", "image", "selection"]
   });
 }
