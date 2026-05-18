@@ -5,12 +5,14 @@ type ContentAction =
   | "COPY_ACTIVE_ANSWER"
   | "COPY_VISIBLE_CHAT"
   | "COPY_FULL_PAGE_MARKDOWN"
+  | "DOWNLOAD_FULL_PAGE_MARKDOWN"
   | "TOGGLE_UNLOCK_COPY"
   | "START_REGION_OCR";
 
 type BackgroundMessage =
   | { type: "RUN_MINERU_OCR"; rect: RegionRect }
-  | { type: "EXECUTE_COPY_WEB_TO_AI_ACTION"; action: ContentAction };
+  | { type: "EXECUTE_COPY_WEB_TO_AI_ACTION"; action: ContentAction }
+  | { type: "ACTIVATE_COPY_WEB_TO_AI_PAGE" };
 
 interface RegionRect {
   x: number;
@@ -26,26 +28,17 @@ const MENU_IDS: Record<string, ContentAction> = {
   "copy-web-to-ai-copy-answer": "COPY_ACTIVE_ANSWER",
   "copy-web-to-ai-copy-visible-chat": "COPY_VISIBLE_CHAT",
   "copy-web-to-ai-copy-full-page": "COPY_FULL_PAGE_MARKDOWN",
+  "copy-web-to-ai-download-full-page": "DOWNLOAD_FULL_PAGE_MARKDOWN",
   "copy-web-to-ai-unlock-copy": "TOGGLE_UNLOCK_COPY",
   "copy-web-to-ai-ocr-region": "START_REGION_OCR"
 };
 
-const DYNAMIC_SCRIPT_ID = "copy-web-to-ai-all-sites";
-
 chrome.runtime.onInstalled.addListener(() => {
   void createContextMenus();
-  void syncAllSitesContentScript();
 });
 
 chrome.runtime.onStartup.addListener(() => {
   void createContextMenus();
-  void syncAllSitesContentScript();
-});
-
-chrome.storage.onChanged.addListener((changes, areaName) => {
-  if (areaName === "local" && changes.allowAllSites) {
-    void syncAllSitesContentScript();
-  }
 });
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
@@ -89,6 +82,13 @@ async function handleMessage(message: BackgroundMessage, sender: chrome.runtime.
     const tab = await getActiveTab();
     if (!tab?.id) throw new Error("没有可操作的标签页");
     return runActionInTab(tab.id, message.action);
+  }
+
+  if (message.type === "ACTIVATE_COPY_WEB_TO_AI_PAGE") {
+    const tab = await getActiveTab();
+    if (!tab?.id) throw new Error("没有可操作的标签页");
+    await ensureContentScript(tab.id);
+    return { ok: true };
   }
 
   return { ok: false, error: "未知 background 指令" };
@@ -141,6 +141,11 @@ async function createContextMenus(): Promise<void> {
     contexts: ["page", "selection"]
   });
   chrome.contextMenus.create({
+    id: "copy-web-to-ai-download-full-page",
+    title: "Copy Web to AI: 下载整页 Markdown",
+    contexts: ["page", "selection"]
+  });
+  chrome.contextMenus.create({
     id: "copy-web-to-ai-unlock-copy",
     title: "Copy Web to AI: 临时解锁当前页复制",
     contexts: ["page", "selection"]
@@ -150,29 +155,6 @@ async function createContextMenus(): Promise<void> {
     title: "Copy Web to AI: 框选 MinerU OCR",
     contexts: ["page", "image", "selection"]
   });
-}
-
-async function syncAllSitesContentScript(): Promise<void> {
-  const { allowAllSites = false } = await chrome.storage.local.get({ allowAllSites: false });
-  const hasAllSites = await chrome.permissions.contains({ origins: ["<all_urls>"] });
-
-  try {
-    await chrome.scripting.unregisterContentScripts({ ids: [DYNAMIC_SCRIPT_ID] });
-  } catch {
-    /* The script may not have been registered yet. */
-  }
-
-  if (!allowAllSites || !hasAllSites) return;
-
-  await chrome.scripting.registerContentScripts([
-    {
-      id: DYNAMIC_SCRIPT_ID,
-      matches: ["<all_urls>"],
-      js: ["content.js"],
-      runAt: "document_idle",
-      persistAcrossSessions: true
-    }
-  ]);
 }
 
 async function captureVisibleTab(windowId: number): Promise<string> {

@@ -3,6 +3,7 @@ type Action =
   | "COPY_ACTIVE_ANSWER"
   | "COPY_VISIBLE_CHAT"
   | "COPY_FULL_PAGE_MARKDOWN"
+  | "DOWNLOAD_FULL_PAGE_MARKDOWN"
   | "TOGGLE_UNLOCK_COPY"
   | "START_REGION_OCR";
 
@@ -38,6 +39,10 @@ app.innerHTML = `
         <span class="icon">P</span>
         <span>复制整页</span>
       </button>
+      <button data-action="DOWNLOAD_FULL_PAGE_MARKDOWN" type="button">
+        <span class="icon">D</span>
+        <span>下载 .md</span>
+      </button>
       <button data-action="TOGGLE_UNLOCK_COPY" type="button">
         <span class="icon">U</span>
         <span>解锁复制</span>
@@ -54,6 +59,7 @@ app.innerHTML = `
 
 injectStyles();
 void hydrateHost();
+void activateCurrentPage();
 
 document.getElementById("open-options")?.addEventListener("click", () => {
   if (!hasExtensionApi()) {
@@ -86,7 +92,7 @@ async function executeAction(action: Action, button: HTMLButtonElement): Promise
       if (cancelled) setStatus("已取消", "info");
       else throw new Error(response?.error || "操作失败");
     } else {
-      setStatus(action === "TOGGLE_UNLOCK_COPY" ? "已切换" : "已发送到页面", "ok");
+      setStatus(getSuccessMessage(action), "ok");
     }
   } catch (error) {
     setStatus(error instanceof Error ? error.message : String(error), "error");
@@ -94,6 +100,12 @@ async function executeAction(action: Action, button: HTMLButtonElement): Promise
     setBusy(false);
     button.focus();
   }
+}
+
+function getSuccessMessage(action: Action): string {
+  if (action === "TOGGLE_UNLOCK_COPY") return "已切换";
+  if (action === "DOWNLOAD_FULL_PAGE_MARKDOWN") return "已开始下载";
+  return "已发送到页面";
 }
 
 async function hydrateHost(): Promise<void> {
@@ -106,6 +118,15 @@ async function hydrateHost(): Promise<void> {
   const host = tab?.url ? new URL(tab.url).hostname : "当前标签页";
   const hostElement = document.getElementById("host");
   if (hostElement) hostElement.textContent = host;
+}
+
+async function activateCurrentPage(): Promise<void> {
+  if (!hasExtensionApi()) return;
+  try {
+    await chrome.runtime.sendMessage({ type: "ACTIVATE_COPY_WEB_TO_AI_PAGE" });
+  } catch {
+    /* chrome://, extension pages, and browser internals cannot run content scripts. */
+  }
 }
 
 function setStatus(message: string, tone: "ok" | "error" | "info"): void {

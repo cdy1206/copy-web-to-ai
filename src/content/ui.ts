@@ -23,6 +23,24 @@ export async function copyText(text: string): Promise<void> {
   }
 }
 
+export function downloadMarkdownFile(markdown: string, source: string): string {
+  if (!markdown.trim()) throw new Error("没有可下载的内容");
+
+  const filename = buildMarkdownFilename(source);
+  const blob = new Blob([markdown], { type: "text/markdown;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  link.style.display = "none";
+  document.body.append(link);
+  link.click();
+  link.remove();
+
+  window.setTimeout(() => URL.revokeObjectURL(url), 30_000);
+  return filename;
+}
+
 export function showToast(message: string, tone: "ok" | "error" | "info" = "info"): void {
   const root = ensureRoot();
   let toast = root.querySelector<HTMLElement>(".copy-web-to-ai-toast");
@@ -108,6 +126,52 @@ export function ensureRoot(): HTMLElement {
       pointer-events: auto;
     }
 
+    #${ROOT_ID} .copy-web-to-ai-selection-toolbar {
+      position: fixed;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      min-height: 32px;
+      padding: 5px;
+      border: 1px solid rgba(255, 255, 255, 0.20);
+      border-radius: 8px;
+      background: rgba(25, 27, 32, 0.96);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.24);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-50%) translateY(4px);
+      transition: opacity 120ms ease, transform 120ms ease;
+    }
+
+    #${ROOT_ID} .copy-web-to-ai-selection-toolbar[data-visible="true"] {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    #${ROOT_ID} .copy-web-to-ai-selection-toolbar button {
+      min-width: 0;
+      min-height: 28px;
+      margin: 0;
+      padding: 0 9px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
+      font: 12px/1 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      white-space: nowrap;
+      pointer-events: auto;
+    }
+
+    #${ROOT_ID} .copy-web-to-ai-selection-toolbar button:hover {
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    #${ROOT_ID} .copy-web-to-ai-selection-toolbar button[hidden] {
+      display: none;
+    }
+
     #${ROOT_ID} .copy-web-to-ai-ocr-layer {
       position: fixed;
       inset: 0;
@@ -138,4 +202,16 @@ export function ensureRoot(): HTMLElement {
   `;
   root.append(style);
   return root;
+}
+
+function buildMarkdownFilename(source: string): string {
+  const title = document.title.trim() || source || "copy-web-to-ai";
+  const safeTitle = title
+    .replace(/[\\/:*?"<>|#]+/g, " ")
+    .replace(/\s+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80)
+    .toLowerCase();
+  const stamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+  return `${safeTitle || "copy-web-to-ai"}-${stamp}.md`;
 }

@@ -49,7 +49,7 @@ app.innerHTML = `
 
       <label class="check">
         <input id="allow-all-sites" name="allowAllSites" type="checkbox" />
-        <span>允许在所有网站按需运行</span>
+        <span>允许快捷键和右键菜单在所有网站按需注入</span>
       </label>
 
       <div class="actions">

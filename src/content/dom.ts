@@ -43,6 +43,11 @@ export function copyActiveAnswerMarkdown(): string {
   return active ? elementToMarkdown(active) : "";
 }
 
+export function copySelectedAnswerMarkdown(): string {
+  const selected = findSelectedAssistantElement();
+  return selected ? elementToMarkdown(selected) : "";
+}
+
 export function copyVisibleChatMarkdown(): string {
   const messages = findVisibleConversationElements();
   if (messages.length > 0) return visibleElementsToMarkdown(messages);
@@ -56,21 +61,28 @@ export function copyFullPageMarkdown(): string {
 }
 
 export function findActiveAnswerElement(): Element | null {
+  const selectedMessage = findSelectedAssistantElement();
+  if (selectedMessage) return selectedMessage;
+
   if (lastPointerTarget) {
     const closest = closestAssistantMessage(lastPointerTarget);
     if (closest && isVisible(closest)) return closest;
   }
 
+  return findVisibleMessageElements().at(-1) ?? null;
+}
+
+export function findSelectedAssistantElement(): Element | null {
   const selection = window.getSelection();
-  const selectedNode = selection?.anchorNode;
-  const selectedElement =
-    selectedNode instanceof Element ? selectedNode : selectedNode?.parentElement ?? null;
-  if (selectedElement) {
-    const selectedMessage = closestAssistantMessage(selectedElement);
+  if (!selection || selection.rangeCount === 0 || selection.isCollapsed) return null;
+
+  const candidates = getSelectionCandidateElements(selection);
+  for (const element of candidates) {
+    const selectedMessage = closestAssistantMessage(element);
     if (selectedMessage && isVisible(selectedMessage)) return selectedMessage;
   }
 
-  return findVisibleMessageElements().at(-1) ?? null;
+  return null;
 }
 
 export function findVisibleMessageElements(): Element[] {
@@ -138,6 +150,23 @@ function uniqueElements(elements: Element[]): Element[] {
     result.push(element);
   }
   return result.sort(compareDocumentOrder);
+}
+
+function getSelectionCandidateElements(selection: Selection): Element[] {
+  const result: Element[] = [];
+  const addNode = (node: Node | null) => {
+    const element = node instanceof Element ? node : node?.parentElement ?? null;
+    if (element && !result.includes(element)) result.push(element);
+  };
+
+  addNode(selection.anchorNode);
+  addNode(selection.focusNode);
+
+  for (let index = 0; index < selection.rangeCount; index += 1) {
+    addNode(selection.getRangeAt(index).commonAncestorContainer);
+  }
+
+  return result;
 }
 
 function compareDocumentOrder(left: Element, right: Element): number {

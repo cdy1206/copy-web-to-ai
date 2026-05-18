@@ -2,7 +2,8 @@ import { copyActiveAnswerMarkdown, copyFullPageMarkdown, copyVisibleChatMarkdown
 import { findMathRoot, extractMath, wrapLatex } from "./math";
 import { selectionToMarkdown } from "./markdown";
 import { startOcrRegionSelection, type RegionRect } from "./ocr-region";
-import { copyText, ensureRoot, showToast } from "./ui";
+import { initializeSelectionToolbar } from "./selection-toolbar";
+import { copyText, downloadMarkdownFile, ensureRoot, showToast } from "./ui";
 import { isUnlockCopyEnabled, toggleUnlockCopy } from "./unlock";
 
 type RuntimeMessage =
@@ -11,6 +12,7 @@ type RuntimeMessage =
   | { type: "COPY_ACTIVE_ANSWER" }
   | { type: "COPY_VISIBLE_CHAT" }
   | { type: "COPY_FULL_PAGE_MARKDOWN" }
+  | { type: "DOWNLOAD_FULL_PAGE_MARKDOWN" }
   | { type: "TOGGLE_UNLOCK_COPY" }
   | { type: "START_REGION_OCR" };
 
@@ -25,6 +27,7 @@ declare global {
 if (!window.__copyWebToAiLoaded) {
   window.__copyWebToAiLoaded = true;
   trackPointerTarget();
+  initializeSelectionToolbar();
   initializeFormulaButton();
   initializeMessages();
 }
@@ -54,6 +57,8 @@ async function handleMessage(message: RuntimeMessage): Promise<Record<string, un
       return copyMarkdownResult(copyVisibleChatMarkdown(), "已复制可见会话");
     case "COPY_FULL_PAGE_MARKDOWN":
       return copyMarkdownResult(copyFullPageMarkdown(), "已复制整页 Markdown");
+    case "DOWNLOAD_FULL_PAGE_MARKDOWN":
+      return downloadMarkdownResult(copyFullPageMarkdown(), "page");
     case "TOGGLE_UNLOCK_COPY": {
       const enabled = toggleUnlockCopy();
       return { ok: true, enabled };
@@ -72,6 +77,15 @@ async function copyMarkdownResult(markdown: string, successMessage: string): Pro
   await copyText(markdown);
   showToast(successMessage, "ok");
   return { ok: true, length: markdown.length };
+}
+
+async function downloadMarkdownResult(markdown: string, source: string): Promise<Record<string, unknown>> {
+  if (!markdown.trim()) {
+    throw new Error("没有找到可下载内容");
+  }
+  const filename = downloadMarkdownFile(markdown, source);
+  showToast("Markdown 文件已下载", "ok");
+  return { ok: true, length: markdown.length, filename };
 }
 
 async function startRegionOcr(): Promise<Record<string, unknown>> {

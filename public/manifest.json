@@ -31,19 +31,6 @@
     "default_title": "Copy Web to AI"
   },
   "options_page": "options.html",
-  "content_scripts": [
-    {
-      "matches": [
-        "https://chatgpt.com/*",
-        "https://chat.openai.com/*",
-        "https://gemini.google.com/*",
-        "https://claude.ai/*",
-        "https://chat.deepseek.com/*"
-      ],
-      "js": ["content.js"],
-      "run_at": "document_idle"
-    }
-  ],
   "commands": {
     "copy-selection-markdown": {
       "suggested_key": {
