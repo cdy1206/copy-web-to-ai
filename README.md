@@ -22,21 +22,45 @@ CopyTeX+ 是一个 Chrome/Edge 浏览器插件。它把 ChatGPT、Gemini、Claud
 
 ## 快速开始
 
-### 1. 安装插件
+### 1. 下载插件包
 
-```bash
-npm install
-npm run build
-```
+如果你只是想安装使用，不要下载 GitHub 的源码 ZIP。源码 ZIP 里面没有构建后的 `dist`，浏览器不能直接当插件加载。
 
-然后打开浏览器扩展管理页：
+请下载已经打包好的插件包：
+
+- [copytex-plus-v0.1.0.zip](https://github.com/cdy1206/copytex-plus/raw/main/release/copytex-plus-v0.1.0.zip)
+
+下载后先解压。Chrome/Edge 的开发者模式不能直接加载 `.zip`，只能加载文件夹。解压出来的 `copytex-plus` 文件夹里应该能看到 `manifest.json`。
+
+### 2. 加载到浏览器
+
+打开浏览器扩展管理页：
 
 - Chrome: `chrome://extensions`
 - Edge: `edge://extensions`
 
-开启开发者模式，点击“加载已解压的扩展”，选择项目里的 `dist` 文件夹。
+然后：
 
-### 2. 打开你想复制的网页
+1. 开启“开发者模式”。
+2. 点击“加载已解压的扩展”。
+3. 选择刚刚解压出来的 `copytex-plus` 文件夹。
+
+注意：浏览器加载的是“解压后的文件夹”，不是 `.zip` 文件本身，也不是 GitHub 下载下来的源码文件夹。
+
+### 从源码安装
+
+如果你想自己改代码或重新构建，再使用这条路径：
+
+```bash
+git clone https://github.com/cdy1206/copytex-plus.git
+cd copytex-plus
+npm install
+npm run build
+```
+
+然后在扩展管理页选择项目里的 `dist` 文件夹。
+
+### 3. 打开你想复制的网页
 
 推荐先试这些页面：
 
@@ -47,7 +71,7 @@ npm run build
 
 这些站点默认可用。其他网站可以在 CopyTeX+ 设置里开启“允许所有网站”。
 
-### 3. 点击浏览器工具栏里的 CopyTeX+
+### 4. 点击浏览器工具栏里的 CopyTeX+
 
 你会看到这些按钮：
 
@@ -171,4 +195,3 @@ DOM 复制只能读取网页里的文本和结构。图片、扫描件、canvas 
 ### 会不会把我的网页内容自动发出去？
 
 不会。DOM 复制、选区复制、公式复制都在本地完成。只有你点击 `框选 OCR` 并完成框选后，裁剪出来的图片才会上传到 MinerU。
-
