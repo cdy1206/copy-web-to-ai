@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <main>
+      <p>下面是图片公式，需要框选 OCR：</p>
+      <canvas width="480" height="120"></canvas>
+      <script>
+        const canvas = document.querySelector("canvas");
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#111";
+        ctx.font = "28px serif";
+        ctx.fillText("E = mc^2", 40, 70);
+      </script>
+    </main>
+  </body>
+</html>
